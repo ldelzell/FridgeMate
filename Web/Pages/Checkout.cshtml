@@ -1,0 +1,298 @@
+﻿@page
+@model Web.Pages.CheckoutModel
+@{
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="overlay"></div>
+    <div id="floating-message">
+        <div class="message-content">
+            <h1>The Order Has Been Successful!</h1>
+            <h3>Please check your email for information on your order.</h3>
+            <p>In order to see your order, you should have entered a valid email!</p>
+            <button id="close-message" class="btn btn-success">Close</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var closeButton = document.getElementById("close-message");
+            var floatingMessage = document.getElementById("floating-message");
+            var overlay = document.getElementById("overlay");
+
+            closeButton.addEventListener("click", function () {
+                // Redirect to "PublicFridge" page
+                window.location.href = '/PublicFridge'; // Change the URL as needed
+            });
+
+            // Show the overlay and message box
+            overlay.style.display = "block";
+            floatingMessage.style.display = "block";
+        });
+    </script>
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 order-md-2 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title d-flex justify-content-between align-items-center">
+                        <span class="text-muted">Your Cart</span>
+                        <span class="badge badge-secondary badge-pill">3</span>
+                    </h4>
+
+                    @if (Model.BasketItems.Any())
+                    {
+                        <ul class="list-group mb-3 sticky-top">
+                            @foreach (var item in Model.BasketItems)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <img src="@item.ImagePath" alt="" class="me-3 img-thumbnail" style="max-width: 100px; max-height: 100px;">
+                                        <div>
+                                            <h6 class="my-0">@item.Name</h6>
+                                            <small class="text-muted">@item.Nutrients</small>
+                                        </div>
+                                    </div>
+                                    <span class="text-muted">$@item.Price</span>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Your basket is empty.</p>
+                    }
+
+                    <div class="mt-4">
+                        <h5 class="card-subtitle">Order Information</h5>
+                        <p class="card-text">Order Number: #@Model.OrderNumber</p>
+                        <p class="card-text">Total Price: $@Model.TotalSum</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8 order-md-1">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Billing Address</h4>
+                    <form class="needs-validation" novalidate="" method="post">
+                        <div class="row">
+                            <input asp-for="UserViewModel.Password" type="text" hidden>
+                            <input asp-for="UserViewModel.Username" type="text" hidden>
+                            <input asp-for="UserViewModel.ImagePath" type="text" hidden>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="firstName">First name</label>
+                                <input asp-for="CheckoutViewModel.FirstName" id="form1Example13" class="form-control form-control-lg" value="@Model.CheckoutFirstName">
+                                <span asp-validation-for="CheckoutViewModel.FirstName"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="lastName">Last name</label>
+                                <input asp-for="CheckoutViewModel.LastName" id="form1Example13" class="form-control form-control-lg" value="@Model.CheckoutLastName">
+                                <span asp-validation-for="CheckoutViewModel.LastName"></span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="username">Username</label>
+                            <div class="input-group">
+                                <input asp-for="CheckoutViewModel.Username" id="form1Example13"  class="form-control form-control-lg" value="@Model.CheckoutEmail">
+                                <span asp-validation-for="CheckoutViewModel.Username"></span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email">Email <span class="text-muted"></span></label>
+                            <input asp-for="CheckoutViewModel.Email" id="form1Example13" type="email" class="form-control form-control-lg" value="@Model.CheckoutUsername">
+                            <span asp-validation-for="CheckoutViewModel.Email"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address">Address</label>
+                            <input asp-for="CheckoutViewModel.Adress" id="address" class="form-control form-control-lg" placeholder="1234 Main St">
+                            <span asp-validation-for="CheckoutViewModel.Adress"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 mb-3">
+                                <label asp-for="CheckoutViewModel.Country">Country</label>
+                                <select asp-for="CheckoutViewModel.Country" class="custom-select d-block w-100" required>
+                                    <option value="">Choose...</option>
+                                    <option>United States</option>
+                                    <option>The Netherlands</option>
+                                    <option>Germany</option>
+                                    <option>United Kingdom</option>
+                                    <option>Bulgaria</option>
+                                </select>
+                                <span asp-validation-for="CheckoutViewModel.Country" class="invalid-feedback"></span>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="zip">Zip</label>
+                                <input asp-for="CheckoutViewModel.ZipCode" id="zip" class="form-control form-control-lg" placeholder="">
+                                <span asp-validation-for="CheckoutViewModel.ZipCode"></span>
+                            </div>
+                        </div>
+                        <hr class="mb-4">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="cc-name">Name on card</label>
+                                <input asp-for="CheckoutViewModel.CardHolderName" type="text" id="cc-name" class="form-control form-control-lg" placeholder="" value="@Model.CheckoutFirstName">
+                                <span asp-validation-for="CheckoutViewModel.CardHolderName"></span>
+                                <small class="text-muted">Full name as displayed on card</small>
+                                <div class="invalid-feedback"> Name on card is required </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="cc-number">Credit card number</label>
+                                <input asp-for="CheckoutViewModel.CardNumber" type="number" id="cc-name" class="form-control form-control-lg" placeholder="">
+                                <span asp-validation-for="CheckoutViewModel.CardNumber"></span>
+                                <div class="invalid-feedback"> Credit card number is required </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="cc-expiration">Expiration</label>
+                                <input asp-for="CheckoutViewModel.CardExperationDate" type="text" id="cc-expiration" class="form-control form-control-lg" placeholder="09/26">
+                                <span asp-validation-for="CheckoutViewModel.CardExperationDate"></span>
+                                <div class="invalid-feedback"> Expiration date required </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="cc-cvv">CVV</label>
+                                <input asp-for="CheckoutViewModel.CVV" type="number" id="cc-cvv" class="form-control form-control-lg" placeholder="567" maxlength="3" oninput="validateCVV()">
+                                <span asp-validation-for="CheckoutViewModel.CVV"></span>
+                                <div id="cvv-error-message" class="invalid-feedback">Security code required</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="my-5 pt-5 text-muted text-center text-small">
+        <p class="mb-1">© 2017-2019 Company Name</p>
+        <ul class="list-inline">
+            <li class="list-inline-item"><a href="#" class="text-muted">Privacy</a></li>
+            <li class="list-inline-item"><a href="#" class="text-muted">Terms</a></li>
+            <li class="list-inline-item"><a href="#" class="text-muted">Support</a></li>
+        </ul>
+    </footer>
+</div>
+
+
+<script>
+    (function () {
+        'use strict'
+
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        }, false)
+    }())
+
+    function validateCVV() {
+        var cvvInput = document.getElementById('cc-cvv');
+        var cvvErrorMessage = document.getElementById('cvv-error-message');
+
+        if (cvvInput.value.length > 3) {
+            cvvInput.value = cvvInput.value.slice(0, 3); 
+            cvvErrorMessage.style.display = 'block';
+        } else {
+            cvvErrorMessage.style.display = 'none';
+        }
+    }
+    document.addEventListener('click', function (event) {
+        var cvvInput = document.getElementById('cc-cvv');
+        var cvvErrorMessage = document.getElementById('cvv-error-message');
+
+        if (event.target !== cvvInput) {
+            cvvErrorMessage.style.display = 'none';
+        }
+    });
+
+</script>
+
+<style>
+    .container {
+        max-width: 960px;
+    }
+
+    .lh-condensed {
+        line-height: 1.25;
+    }
+
+    #overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 1001;
+        display: none;
+    }
+
+    #floating-message {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #4CAF50;
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 1002;
+        width: 800px;
+        text-align: center;
+        display: none;
+    }
+
+    .message-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #close-message {
+        background-color: #45a049;
+        color: white;
+        font-size: 18px;
+        padding: 8px 16px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .container {
+        max-width: 960px;
+        margin-top: 30px;
+    }
+
+    .mb-3 {
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+    footer {
+        margin-top: 50px;
+    }
+</style>

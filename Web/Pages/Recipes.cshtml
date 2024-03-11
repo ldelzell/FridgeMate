@@ -1,0 +1,229 @@
+﻿@page "{recipeIndex?}"
+@model Web.Pages.RecipesModel
+@{
+}
+@if (!string.IsNullOrWhiteSpace(Model.Message))
+{
+    <div class="alert alert-success" role="alert">
+        @Model.Message
+    </div>
+}
+@if (TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-success" id="messageBox">
+        @TempData["Message"]
+    </div>
+
+    <script>
+        setTimeout(function () {
+            document.getElementById('messageBox').style.display = 'none';
+        }, 3000);
+    </script>
+}
+@if (ViewData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@ViewData["ErrorMessage"]</div>
+}
+
+<div class="container mt-5">
+    <!-- Information Section -->
+    <section class="information-section mb-5">
+        <div class="row">
+            <div style="overflow-x: hidden; position: relative;">
+                <img width="1920" height="600" src="/Pictures/Card.jpg" alt="Page Image" class="img-fluid">
+                <div class="information-overlay">
+                    <p>Check Out Our Own Recipes</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   
+
+    <!-- Main Content - Recipes -->
+    <div class="container mt-5 main-container">
+        <div class="page-size-container">
+            <form method="get">
+                <div class="form-group">
+                    <label for="PageSizeDropdown" class="text-white">Page Size:</label>
+                    <select id="PageSizeDropdown" name="PageSizeDynamic" asp-for="PageSizeDynamic" class="form-select" onchange="this.form.submit()">
+                        <option>Default</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div class="row">
+            @foreach (var recipe in Model.Recipes)
+            {
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100 shadow">
+                        <img class="card-img-top" src="~/@recipe.ImagePath" alt="Recipe Image" style="width: 100%; height: 300px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">@recipe.Name</h5>
+                            <p class="card-text text-muted">@recipe.Description</p>
+                            <div class="col-md-6 mb-2">
+                                <a class="btn btn-outline-primary btn-block" href="recipeInfo?recipeId=@recipe.Id">View Details</a>
+                               @* <a class="btn btn-outline-primary btn-block" asp-page="recipeInfo" asp-route-recipetId="@recipe.Id">View Details</a>*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<form asp-page-handler="GenerateRecipe" method="post" class="mt-2">
+    <h3>Check What Recipes You Can Make!</h3>
+    <button class="btn btn-generate" type="submit">Generate Recipe</button>
+    
+</form>
+
+
+<!-- Pagination -->
+<div class="mt-4">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            @for (var i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(Model.recipePageId == i ? "active" : "")">
+                    <a class="page-link" href="/Recipe?recipeIndex=@i">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+<style>
+    .container.mt-5.main-container {
+        background-color: rgba(255, 255, 255, 0.6);
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .card {
+        margin-bottom: 20px;
+    }
+
+    .btnAddtoYourFridge {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 12px 24px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        transition-duration: 0.4s;
+        cursor: pointer;
+        border-radius: 8px;
+    }
+
+    .btnAddtoYourFridge-primary {
+        background-color: #007bff;
+    }
+
+    .btnAddtoYourFridge:hover {
+        background-color: #45a049;
+        color: white;
+    }
+
+    .btnAddtoYourFridge-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .card {
+        transition: transform 0.3s ease-out;
+    }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+    .page-size-container {
+        position: absolute;
+        top: 70px;
+        right: 20px;
+    }
+
+    .information-section {
+        position: relative;
+        height: 45vh;
+    }
+
+    .information-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.7); 
+        color: white;
+        padding: 30px;
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        border-radius: 10px; /* Adds rounded corners to the overlay */
+    }
+
+    .information-section img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px; /* Applies rounded corners to the image for a smoother look */
+        filter: brightness(70%); /* Adjust brightness for a subtle darkened effect */
+    }
+
+    .information-section {
+        position: relative;
+    }
+
+    form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        margin-top: 0px; 
+    }
+
+    .btn-generate {
+        background-color: #043927;
+        color: #fff;
+        border: none;
+        padding: 15px 30px;
+        font-size: 1.5em;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+    }
+
+        .btn-generate:hover {
+            background-color: #01201f;
+            color: #fff;
+        }
+
+    .pagination .page-link {
+        background-color: #043927;
+        color: #fff;
+        border: 1px solid #043927;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #01201f;
+        border: 1px solid #01201f;
+    }
+
+    .pagination .page-link:hover {
+        background-color: #01201f;
+        border: 1px solid #01201f;
+    }
+</style>

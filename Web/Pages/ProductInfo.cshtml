@@ -1,0 +1,110 @@
+﻿@page
+@model Web.Pages.ProductInfoModel
+@{
+}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .product-container {
+        margin-top: 50px;
+        padding: 40px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+    }
+
+        .product-image:hover {
+            transform: scale(1.1);
+        }
+
+    h2 {
+        color: #343a40;
+        font-size: 2.5em;
+        margin-bottom: 20px;
+    }
+
+    strong {
+        color: #007bff;
+    }
+
+    p {
+        color: #6c757d;
+        font-size: 18px;
+        line-height: 1.6;
+    }
+
+    hr {
+        border-top: 1px solid #dee2e6;
+        margin: 30px 0;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+        ul li {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+    button {
+        background-color: #007bff;
+        border: none;
+        color: white;
+        padding: 18px 35px;
+        font-size: 18px;
+        border-radius: 10px;
+        transition: background-color 0.3s ease-in-out;
+        cursor: pointer;
+    }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+</style>
+
+<div class="container-fluid product-container">
+    <div class="row">
+        <div class="col-md-6">
+            <img class="product-image" id="productImage" src="@Model.Product.ImagePath" alt="Product Image">
+        </div>
+        <div class="col-md-6">
+            <h2 class="mb-3">@Model.Product.Name</h2>
+            <p><strong>Price:</strong> @Model.Product.Price $</p>
+            <p>
+                <strong>Quantity:</strong> @Model.Product.Quantity grams
+            </p>
+            <p>
+                <strong>Expiration Date:</strong> @Model.Product.ExpirationDate.ToString("MM/dd/yyyy")
+            </p>
+            <hr>
+            <h4>Specifications</h4>
+            <ul>
+                <li>Product Quality: High-quality product.</li>
+                <li>Taste: Our products have the best taste due to the fact that they are organic</li>
+                <li>Size: It really depends on the weight of the product.</li>
+                <li>Origin: FridgeMate's Village Garden</li>
+            </ul>
+            <form asp-page-handler="AddToBasket" method="post">
+                <input type="hidden" name="itemId" value="@Model.Product.Id" />
+                <button class="btn btn-primary mt-3" type="submit">Add to Basket</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS (optional) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.1/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

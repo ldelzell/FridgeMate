@@ -1,0 +1,181 @@
+﻿@page
+@model Web.Pages.ProfileModel
+@{
+    ViewData["Title"] = "Profile";
+}
+<h1>@ViewData["Title"]</h1>
+@if (TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-success" id="messageBox">
+        @TempData["Message"]
+    </div>
+
+    <script>
+        setTimeout(function () {
+            document.getElementById('messageBox').style.display = 'none';
+        }, 3000);
+    </script>
+}
+@if (ViewData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@ViewData["ErrorMessage"]</div>
+}
+<form method="post">
+    <div class="container">
+        <div class="main-body">
+            <div class="row gutters-sm">
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center text-center">
+                                <img src="@Model.UserModel.ImagePath" alt="User Image" class="profile-image" />
+                                <div class="mt-3">
+                                    <label asp-for="UserModel.FirstName">@Model.UserModel.FirstName</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label for="first-name" class="col-sm-3 col-form-label">First Name</label>
+                                <div class="col-sm-9">
+                                    <input asp-for="UserModel.FirstName" type="text" id="first-name" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="last-name" class="col-sm-3 col-form-label">Last Name</label>
+                                <div class="col-sm-9">
+                                    <input asp-for="UserModel.LastName" type="text" id="last-name" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="email" class="col-sm-3 col-form-label">Email</label>
+                                <div class="col-sm-9">
+                                    <input asp-for="UserModel.Email" type="email" id="email" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="username" class="col-sm-3 col-form-label">Username</label>
+                                <div class="col-sm-9">
+                                    <input asp-for="UserModel.Username" type="text" id="username" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="phone" class="col-sm-3 col-form-label">Phone</label>
+                                <div class="col-sm-9">
+                                    <input asp-for="UserModel.PhoneNumber" type="number" id="phone" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <button class="btn btn-info" type="submit" id="edit-btn">Edit</button>
+                                </div>
+                            </div>
+                                <input asp-for="UserModel.Password" id="pass"  hidden value="@Model.UserModel.Password">
+                           @* <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <a class="marketplace-link btn btn-primary" asp-area="" asp-page="/EditPassword">Edit Password</a>
+                                </div>
+                            </div>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .main-body {
+        padding: 15px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+        max-width: 1600px; /* Adjust the max-width to your preference */
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-image {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+
+    .card-body {
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    button {
+        transition: background-color 0.3s ease;
+    }
+
+        button:hover {
+            background-color: #17a2b8;
+        }
+
+    .marketplace-link {
+        transition: background-color 0.3s ease;
+    }
+
+        .marketplace-link:hover {
+            background-color: #007bff;
+        }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+
+@section Scripts {
+    <script>
+        var editBtn = document.getElementById("edit-btn");
+        var firstNameInput = document.getElementById("first-name");
+        var lastNameInput = document.getElementById("last-name");
+        var emailInput = document.getElementById("email");
+        var usernameInput = document.getElementById("username");
+        var phoneInput = document.getElementById("phone");
+
+
+        firstNameInput.disabled = true;
+        lastNameInput.disabled = true;
+        emailInput.disabled = true;
+        usernameInput.disabled = true;
+        phoneInput.disabled = true;
+
+        editBtn.addEventListener("click", function (e) {
+            if (firstNameInput.disabled) {
+                e.preventDefault();
+                firstNameInput.disabled = false;
+                lastNameInput.disabled = false;
+                emailInput.disabled = false;
+                usernameInput.disabled = false;
+                phoneInput.disabled = false;
+                editBtn.textContent = "Save";
+            }
+        });
+    </script>
+}

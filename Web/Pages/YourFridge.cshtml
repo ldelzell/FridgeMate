@@ -1,0 +1,184 @@
+﻿@page "{index?}"
+@model Web.Pages.YourFridgeModel
+@{
+}
+@if (!string.IsNullOrWhiteSpace(Model.Message))
+{
+    <div class="alert alert-success" role="alert">
+        @Model.Message
+    </div>
+}
+@if (ViewData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@ViewData["ErrorMessage"]</div>
+}
+@if (TempData.ContainsKey("Message"))
+{
+    <div class="alert alert-success" id="messageBox">
+        @TempData["Message"]
+    </div>
+
+    <script>
+        setTimeout(function () {
+            document.getElementById('messageBox').style.display = 'none';
+        }, 3000);
+    </script>
+}
+
+<div>
+    <section class="information-section mb-5">
+        <div class="row">
+            <div style="overflow-x:hidden; position: relative;">
+                <img width="1920" height="600" src="/Pictures/Card2.jpg" alt="Page Image">
+                <div class="information-overlay">
+                    <p>Your Products</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="container mt-5 main-container">
+        <div class="row">
+            @if (Model.Products.Any())
+            {
+                @foreach (var product in Model.Products)
+                {
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card h-100 shadow">
+                            <img class="card-img-top" src="~/@product.ImagePath" alt="Product Image" style="width: 100%; height: 300px; object-fit: cover;">
+
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">@product.Name</h5>
+                                <p class="card-text text-muted">@product.Nutrients</p>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-2">
+                                        <a class="btn btn-outline-primary btn-block" asp-page="productInfo" asp-route-productId="@product.Id">View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div id="empty-message">
+                    <img src="/Pictures/Fridge.png" alt="No products available" style="max-width: 650px; height: auto; margin: 0 auto; display: block; border-radius: 10px; transition: all 0.3s ease;">
+                </div>
+            }
+        </div>
+    </div>
+    @if (Model.Products.Any())
+    {
+        <div class="mt-4">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    @for (var i = 1; i <= Model.TotalPages; i++)
+                    {
+                        <li class="page-item @(Model.Index == i ? "active" : "")">
+                            <a class="page-link" href="/YourFridge?index=@i">@i</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+    }
+</div>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<style>
+    .container.mt-5.main-container {
+        background-color: rgba(255, 255, 255, 0.6);
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .card {
+        margin-bottom: 20px;
+    }
+
+    .btnAddtoYourFridge {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 12px 24px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        transition-duration: 0.4s;
+        cursor: pointer;
+        border-radius: 8px;
+    }
+
+    .btnAddtoYourFridge-primary {
+        background-color: #007bff;
+    }
+
+    .btnAddtoYourFridge:hover {
+        background-color: #45a049;
+        color: white;
+    }
+
+    .btnAddtoYourFridge-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .card {
+        transition: transform 0.3s ease-out;
+    }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+    .page-size-container {
+        position: absolute;
+        top: 70px;
+        right: 20px;
+    }
+
+    .information-section {
+        position: relative;
+        height: 45vh;
+    }
+
+    .information-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.7); /* Slightly increased opacity for a more subtle overlay */
+        color: white;
+        padding: 30px;
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        border-radius: 10px; /* Adds rounded corners to the overlay */
+    }
+
+    .information-section img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 10px; /* Applies rounded corners to the image for a smoother look */
+        filter: brightness(70%); /* Adjust brightness for a subtle darkened effect */
+    }
+
+    .pagination .page-link {
+        background-color: #043927;
+        color: #fff;
+        border: 1px solid #043927;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #01201f;
+        border: 1px solid #01201f;
+    }
+
+    .pagination .page-link:hover {
+        background-color: #01201f;
+        border: 1px solid #01201f;
+    }
+</style>

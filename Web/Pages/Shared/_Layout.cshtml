@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Web</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Web.styles.css" asp-append-version="true" />
+    <link rel="icon" type="image/x-icon" href="/Pictures/Logo2.png">
+</head>
+
+<body>
+    <div style="min-height: 100vh">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-page="/Index">
+                    <img height="50" width="auto" src="/Pictures/Logo1.png" alt="Your Logo">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/PublicFridge">Public Fridge</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Recipes">Recipes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Basket">Basket</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link text-dark dropdown-toggle " id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false" asp-area="" asp-page="/Profile">
+                                Profile
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                                <a class="nav-link text-light" asp-area="" asp-page="/Profile">Profile</a>
+                                <a class="nav-link text-light" asp-area="" asp-page="/YourFridge">Fridge</a>
+                            </ul>
+                        </li>
+                        @if (User?.Identity?.IsAuthenticated != true)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/LogIn">Log In</a>
+                            </li>
+                        }
+                        @if (User?.Identity?.IsAuthenticated ?? false)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Logout">Log out</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+        <div class="container">
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+
+    <style>
+        .bg-sacramento-green {
+    background-color: #043927;
+}
+        .fridge-mate-footer {
+            background-color: #043927; 
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 34px 0; 
+        }
+
+            .fridge-mate-footer h6 {
+                color: #fff; /* White color for header text */
+                font-weight: bold; /* Make the headers bold */
+            }
+
+            .fridge-mate-footer p {
+                color: #ccc; /* Light gray color for paragraph text */
+                font-size: 14px; /* Adjust font size for paragraphs */
+            }
+
+            .fridge-mate-footer a {
+                color: #78a44f; /* A lighter green for links */
+                text-decoration: none; /* Remove underlines from links */
+            }
+
+                .fridge-mate-footer a:hover {
+                    color: #d6e9c6; /* Lighter green on hover for links */
+                }
+    </style>
+    <footer class="text-center text-lg-start bg-body-tertiary text-muted fridge-mate-footer">
+        <section class="">
+            <div class="container text-center text-md-start mt-5">
+                <div class="row mt-3">
+                    <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            <i class="fas fa-gem me-3"></i>FridgeMate
+                        </h6>
+                        <p style="font-family">
+                            "Culinary delight: Explore premium, locally-sourced ingredients for exceptional dining experiences."
+                        </p>
+                    </div>
+                    <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            Our Best Products
+                        </h6>
+                        <p>
+                            <a href="/productInfo?productId=97" class="text-reset">Steak</a>
+                        </p>
+                        <p>
+                            <a href="/productInfo?productId=103" class="text-reset">Strawberrys</a>
+                        </p>
+                        <p>
+                            <a href="/productInfo?productId=102" class="text-reset">Salmon</a>
+                        </p>
+                    </div>
+                    <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            Our Best Recipes
+                        </h6>
+                        <p>
+                            <a href="/recipeInfo?recipeId=34" class="text-reset">Beef Steak</a>
+                        </p>
+                        <p>
+                            <a href="/recipeInfo?recipeId=26" class="text-reset">Mekici</a>
+                        </p>
+                    </div>
+                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                        <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+                        <p><i class="fas fa-home me-3"></i> Eindhoven, Stationsweg 1, NL</p>
+                        <p>
+                            <i class="fas fa-envelope me-3"></i>
+                            fridgeMate@gmail.com
+                        </p>
+                        <p><i class="fas fa-phone me-3"></i> + 31 6 72 20 32 81</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.1);">
+            © 2023 Fridge Mate:
+            <a class="text-reset fw-bold" href="https://www.linkedin.com/in/stasnikolov/">Stanislav Nikolov</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+<style>
+
+</style>
