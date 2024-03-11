@@ -1,0 +1,17 @@
+Welcome to "USE YOUR FRIDGE"
+
+GitLab Link: https://git.fhict.nl/I507486/use-your-fridge-app.git
+
+To Log in, you will need to use the following credentials:
+Username:admin
+Password:admin
+
+PLEASE WHATCH FIRST the video on how the application works and how to START Them
+
+! Notes: In Order to run the Windows Forms Application please run in the background first the Web Application 
+and let it run in the bacground. 
+
+Now run the Windows Forms App. 
+
+This problems occures because I use API using HTTP Requests for storing and retreiving images on the server. 
+And when Web App is not running the background, Desktop App can not access the images and does not work properly. 
